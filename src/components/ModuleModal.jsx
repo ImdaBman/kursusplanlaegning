@@ -31,6 +31,12 @@ export default function ModuleModal({ date, module, onSave, onDelete, onClose })
     }
   }, [module, date]);
 
+  const handleTitleChange = (e) => {
+    const val = e.target.value;
+    setTitle(val);
+    if (/refleksion/i.test(val)) setTeacher('Selvstudie');
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     onSave({ date, holdnavn: holdnavn.trim(), title: title.trim(), teacher, location });
@@ -66,7 +72,7 @@ export default function ModuleModal({ date, module, onSave, onDelete, onClose })
             <input
               type="text"
               value={title}
-              onChange={e => setTitle(e.target.value)}
+              onChange={handleTitleChange}
               placeholder="Kursusnavn eller beskrivelse"
             />
           </label>

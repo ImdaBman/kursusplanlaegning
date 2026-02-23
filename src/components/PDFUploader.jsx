@@ -70,13 +70,17 @@ export default function PDFUploader({ onImport, onClose }) {
   const handleImport = () => {
     const modules = foundDates
       .filter(d => selected.has(d.date))
-      .map(d => ({
-        date: d.date,
-        holdnavn: holdnavn.trim(),
-        title: d.suggestedTitle || title.trim() || 'Kursusdag',
-        teacher: defaultTeacher,
-        location: defaultLocation,
-      }));
+      .map(d => {
+        const resolvedTitle = d.suggestedTitle || title.trim() || 'Kursusdag';
+        const resolvedTeacher = /refleksion/i.test(resolvedTitle) ? 'Selvstudie' : defaultTeacher;
+        return {
+          date: d.date,
+          holdnavn: holdnavn.trim(),
+          title: resolvedTitle,
+          teacher: resolvedTeacher,
+          location: defaultLocation,
+        };
+      });
     onImport(modules);
     onClose();
   };
