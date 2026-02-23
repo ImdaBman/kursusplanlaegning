@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react';
 import MonthGrid from './components/MonthGrid';
 import ModuleModal from './components/ModuleModal';
 import PDFUploader from './components/PDFUploader';
+import DeleteModal from './components/DeleteModal';
 import { useModules } from './hooks/useModules';
 import { TEACHER_COLORS, TEACHERS } from './components/ModuleChip';
 import { getHolidays } from './utils/holidays';
@@ -16,15 +17,8 @@ export default function App() {
   const now = new Date();
   const [year, setYear] = useState(now.getFullYear());
   const [month, setMonth] = useState(now.getMonth());
-  const { modules, loading, addModule, updateModule, deleteModule, addModules, resetModules } = useModules();
-  const [resetting, setResetting] = useState(false);
-
-  const handleReset = async () => {
-    if (!window.confirm('Er du sikker på at du vil slette AL data? Dette kan ikke fortrydes.')) return;
-    setResetting(true);
-    await resetModules();
-    setResetting(false);
-  };
+  const { modules, loading, addModule, updateModule, deleteModule, addModules, deleteByHoldnavn, resetModules } = useModules();
+  const [showDelete, setShowDelete] = useState(false);
 
   const [modal, setModal] = useState(null);
   const [showPDF, setShowPDF] = useState(false);
@@ -82,8 +76,8 @@ export default function App() {
           <button className="btn btn-pdf" onClick={() => setShowPDF(true)}>
             Importer Excel / CSV
           </button>
-          <button className="btn btn-reset" onClick={handleReset} disabled={resetting}>
-            {resetting ? 'Nulstiller…' : 'Nulstil alt'}
+          <button className="btn btn-reset" onClick={() => setShowDelete(true)}>
+            Slet data
           </button>
           <div className="month-nav">
             <button onClick={prevMonth} aria-label="Forrige måned">‹</button>
@@ -122,6 +116,15 @@ export default function App() {
         <PDFUploader
           onImport={addModules}
           onClose={() => setShowPDF(false)}
+        />
+      )}
+
+      {showDelete && (
+        <DeleteModal
+          modules={modules}
+          onDeleteHoldnavn={deleteByHoldnavn}
+          onDeleteAll={resetModules}
+          onClose={() => setShowDelete(false)}
         />
       )}
     </div>

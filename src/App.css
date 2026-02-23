@@ -76,7 +76,46 @@ body {
 .btn-pdf:hover { background: #0284c7; }
 .btn-reset { background: #fee2e2; color: #dc2626; border: 1px solid #fca5a5; }
 .btn-reset:hover { background: #fecaca; }
-.btn-reset:disabled { opacity: .6; cursor: not-allowed; }
+.btn-sm { padding: .3rem .65rem; font-size: .78rem; }
+
+/* ── Delete modal ────────────────────────────────────────────── */
+.delete-modal { max-width: 460px; }
+
+.delete-list {
+  display: flex;
+  flex-direction: column;
+  gap: .4rem;
+  margin-bottom: 1.25rem;
+  max-height: 320px;
+  overflow-y: auto;
+}
+
+.delete-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .75rem;
+  padding: .6rem .75rem;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 7px;
+}
+
+.delete-row-info { display: flex; flex-direction: column; gap: .1rem; }
+.delete-holdnavn { font-size: .88rem; font-weight: 700; color: #1e293b; }
+.delete-count { font-size: .75rem; color: #64748b; }
+
+.delete-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: .75rem;
+  border-top: 1px solid #f1f5f9;
+}
+
+.delete-confirm { padding: .25rem 0; }
+.delete-confirm p { font-size: .9rem; color: #374151; margin-bottom: 1.25rem; line-height: 1.5; }
+.delete-empty { color: #94a3b8; font-size: .88rem; margin-bottom: 1rem; }
 .btn-link {
   background: none; border: none; color: #3b82f6;
   cursor: pointer; font-size: .82rem; text-decoration: underline;

@@ -7,7 +7,7 @@ export const TEACHER_COLORS = {
 };
 
 export const TEACHERS = ['Bruno', 'Kamilla', 'Oliver', 'Alexander', 'Selvstudie'];
-export const LOCATIONS = ['Fysisk', 'Lokale 1', 'Lokale 2', 'Lokale 3'];
+export const LOCATIONS = ['Fysisk', 'Lokale 1', 'Lokale 2', 'Lokale 3', 'Hjemmefra', 'Selvstudie'];
 
 export default function ModuleChip({ module, onClick }) {
   const color = TEACHER_COLORS[module.teacher] || '#6b7280';

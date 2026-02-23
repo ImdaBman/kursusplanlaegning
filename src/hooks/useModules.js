@@ -48,6 +48,15 @@ export function useModules() {
     await batch.commit();
   };
 
+  const deleteByHoldnavn = async (holdnavn) => {
+    const snapshot = await getDocs(collection(db, COLLECTION));
+    const batch = writeBatch(db);
+    snapshot.docs
+      .filter(d => d.data().holdnavn === holdnavn)
+      .forEach(d => batch.delete(d.ref));
+    await batch.commit();
+  };
+
   const resetModules = async () => {
     const snapshot = await getDocs(collection(db, COLLECTION));
     const batch = writeBatch(db);
@@ -55,5 +64,5 @@ export function useModules() {
     await batch.commit();
   };
 
-  return { modules, loading, addModule, updateModule, deleteModule, addModules, resetModules };
+  return { modules, loading, addModule, updateModule, deleteModule, addModules, deleteByHoldnavn, resetModules };
 }
