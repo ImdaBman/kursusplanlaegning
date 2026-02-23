@@ -18,6 +18,7 @@ export default function PDFUploader({ onImport, onClose }) {
   const [error, setError] = useState(null);
   const [foundDates, setFoundDates] = useState([]);
   const [selected, setSelected] = useState(new Set());
+  const [holdnavn, setHoldnavn] = useState('');
   const [defaultTeacher, setDefaultTeacher] = useState(TEACHERS[0]);
   const [defaultLocation, setDefaultLocation] = useState(LOCATIONS[0]);
   const [title, setTitle] = useState('');
@@ -71,6 +72,7 @@ export default function PDFUploader({ onImport, onClose }) {
       .filter(d => selected.has(d.date))
       .map(d => ({
         date: d.date,
+        holdnavn: holdnavn.trim(),
         title: d.suggestedTitle || title.trim() || 'Kursusdag',
         teacher: defaultTeacher,
         location: defaultLocation,
@@ -118,6 +120,16 @@ export default function PDFUploader({ onImport, onClose }) {
         {step === 'preview' && (
           <>
             <div className="pdf-defaults">
+              <label>
+                Holdnavn
+                <input
+                  type="text"
+                  value={holdnavn}
+                  onChange={e => setHoldnavn(e.target.value)}
+                  placeholder="F.eks. Hold A..."
+                  autoFocus
+                />
+              </label>
               <label>
                 Fallback-titel (bruges hvis ingen titel i fil)
                 <input

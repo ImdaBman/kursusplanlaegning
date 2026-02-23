@@ -7,6 +7,7 @@ import {
   deleteDoc,
   doc,
   writeBatch,
+  getDocs,
 } from 'firebase/firestore';
 import { db } from '../firebase';
 
@@ -16,14 +17,13 @@ export function useModules() {
   const [modules, setModules] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Realtids-lytter — data synkroniseres automatisk fra Firestore
   useEffect(() => {
     const unsub = onSnapshot(collection(db, COLLECTION), (snapshot) => {
       const data = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
       setModules(data);
       setLoading(false);
     });
-    return unsub; // afmeld lytter ved unmount
+    return unsub;
   }, []);
 
   const addModule = async (moduleData) => {
@@ -48,5 +48,12 @@ export function useModules() {
     await batch.commit();
   };
 
-  return { modules, loading, addModule, updateModule, deleteModule, addModules };
+  const resetModules = async () => {
+    const snapshot = await getDocs(collection(db, COLLECTION));
+    const batch = writeBatch(db);
+    snapshot.docs.forEach(d => batch.delete(d.ref));
+    await batch.commit();
+  };
+
+  return { modules, loading, addModule, updateModule, deleteModule, addModules, resetModules };
 }

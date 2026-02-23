@@ -16,7 +16,15 @@ export default function App() {
   const now = new Date();
   const [year, setYear] = useState(now.getFullYear());
   const [month, setMonth] = useState(now.getMonth());
-  const { modules, loading, addModule, updateModule, deleteModule, addModules } = useModules();
+  const { modules, loading, addModule, updateModule, deleteModule, addModules, resetModules } = useModules();
+  const [resetting, setResetting] = useState(false);
+
+  const handleReset = async () => {
+    if (!window.confirm('Er du sikker på at du vil slette AL data? Dette kan ikke fortrydes.')) return;
+    setResetting(true);
+    await resetModules();
+    setResetting(false);
+  };
 
   const [modal, setModal] = useState(null);
   const [showPDF, setShowPDF] = useState(false);
@@ -73,6 +81,9 @@ export default function App() {
         <div className="header-right">
           <button className="btn btn-pdf" onClick={() => setShowPDF(true)}>
             Importer Excel / CSV
+          </button>
+          <button className="btn btn-reset" onClick={handleReset} disabled={resetting}>
+            {resetting ? 'Nulstiller…' : 'Nulstil alt'}
           </button>
           <div className="month-nav">
             <button onClick={prevMonth} aria-label="Forrige måned">‹</button>

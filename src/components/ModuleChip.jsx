@@ -20,12 +20,13 @@ export default function ModuleChip({ module, onClick }) {
         e.stopPropagation();
         onClick(module);
       }}
-      title={`${module.title} — ${module.teacher} — ${module.location}`}
+      title={`${module.holdnavn ? module.holdnavn + ' · ' : ''}${module.title} — ${module.teacher} — ${module.location}`}
     >
+      {module.holdnavn && (
+        <span className="chip-holdnavn">{module.holdnavn}</span>
+      )}
       <span className="chip-title">{module.title || '(ingen titel)'}</span>
-      <span className="chip-teacher" style={{ color }}>
-        {module.teacher}
-      </span>
+      <span className="chip-teacher" style={{ color }}>{module.teacher}</span>
       <span className="chip-location">{module.location}</span>
     </div>
   );

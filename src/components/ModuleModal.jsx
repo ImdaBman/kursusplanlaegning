@@ -12,16 +12,19 @@ function formatDate(dateStr) {
 }
 
 export default function ModuleModal({ date, module, onSave, onDelete, onClose }) {
+  const [holdnavn, setHoldnavn] = useState('');
   const [title, setTitle] = useState('');
   const [teacher, setTeacher] = useState(TEACHERS[0]);
   const [location, setLocation] = useState(LOCATIONS[0]);
 
   useEffect(() => {
     if (module) {
+      setHoldnavn(module.holdnavn || '');
       setTitle(module.title || '');
       setTeacher(module.teacher || TEACHERS[0]);
       setLocation(module.location || LOCATIONS[0]);
     } else {
+      setHoldnavn('');
       setTitle('');
       setTeacher(TEACHERS[0]);
       setLocation(LOCATIONS[0]);
@@ -30,7 +33,7 @@ export default function ModuleModal({ date, module, onSave, onDelete, onClose })
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSave({ date, title: title.trim(), teacher, location });
+    onSave({ date, holdnavn: holdnavn.trim(), title: title.trim(), teacher, location });
   };
 
   const handleBackdropClick = (e) => {
@@ -48,13 +51,23 @@ export default function ModuleModal({ date, module, onSave, onDelete, onClose })
 
         <form onSubmit={handleSubmit} className="modal-form">
           <label>
+            Holdnavn
+            <input
+              type="text"
+              value={holdnavn}
+              onChange={e => setHoldnavn(e.target.value)}
+              placeholder="F.eks. Hold A, EUD23..."
+              autoFocus
+            />
+          </label>
+
+          <label>
             Titel
             <input
               type="text"
               value={title}
               onChange={e => setTitle(e.target.value)}
               placeholder="Kursusnavn eller beskrivelse"
-              autoFocus
             />
           </label>
 
