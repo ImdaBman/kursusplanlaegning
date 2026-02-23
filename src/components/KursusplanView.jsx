@@ -95,11 +95,15 @@ export default function KursusplanView({ modules, onClose }) {
                 {kursusModules.map((m, i) => {
                   const { ugedag, dato } = formatDateLong(m.date);
                   const color = TEACHER_COLORS[m.teacher] || '#6b7280';
+                  const isToday = m.date === new Date().toISOString().split('T')[0];
                   return (
-                    <tr key={m.id} className={i % 2 === 0 ? 'row-even' : 'row-odd'}>
+                    <tr key={m.id} className={isToday ? 'row-today' : i % 2 === 0 ? 'row-even' : 'row-odd'}>
                       <td className="col-nr">{i + 1}</td>
                       <td className="col-ugedag">{ugedag}</td>
-                      <td className="col-dato">{dato}</td>
+                      <td className="col-dato">
+                        {dato}
+                        {isToday && <span className="today-badge">I dag</span>}
+                      </td>
                       <td className="col-titel">{m.title || '—'}</td>
                       <td className="col-underviser">
                         <span className="plan-teacher" style={{ color }}>
