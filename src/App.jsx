@@ -16,7 +16,7 @@ export default function App() {
   const now = new Date();
   const [year, setYear] = useState(now.getFullYear());
   const [month, setMonth] = useState(now.getMonth());
-  const { modules, addModule, updateModule, deleteModule, addModules } = useModules();
+  const { modules, loading, addModule, updateModule, deleteModule, addModules } = useModules();
 
   const [modal, setModal] = useState(null);
   const [showPDF, setShowPDF] = useState(false);
@@ -85,6 +85,7 @@ export default function App() {
       </header>
 
       <main className="main-single">
+        {loading && <div className="loading-bar">Henter data…</div>}
         <MonthGrid
           year={year}
           month={month}

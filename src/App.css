@@ -83,6 +83,17 @@ body {
 /* ── Main layout ─────────────────────────────────────────────── */
 main { padding: 1.25rem 1rem; }
 
+.loading-bar {
+  text-align: center;
+  padding: .6rem;
+  background: #eff6ff;
+  color: #3b82f6;
+  font-size: .85rem;
+  font-weight: 500;
+  border-radius: 8px;
+  margin-bottom: .75rem;
+}
+
 .main-single {
   width: 100%;
 }

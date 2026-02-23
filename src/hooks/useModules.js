@@ -1,39 +1,52 @@
 import { useState, useEffect } from 'react';
+import {
+  collection,
+  onSnapshot,
+  addDoc,
+  updateDoc,
+  deleteDoc,
+  doc,
+  writeBatch,
+} from 'firebase/firestore';
+import { db } from '../firebase';
 
-const STORAGE_KEY = 'kursusplanlaegger_modules';
+const COLLECTION = 'modules';
 
 export function useModules() {
-  const [modules, setModules] = useState(() => {
-    try {
-      const stored = localStorage.getItem(STORAGE_KEY);
-      return stored ? JSON.parse(stored) : [];
-    } catch {
-      return [];
-    }
-  });
+  const [modules, setModules] = useState([]);
+  const [loading, setLoading] = useState(true);
 
+  // Realtids-lytter — data synkroniseres automatisk fra Firestore
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(modules));
-  }, [modules]);
+    const unsub = onSnapshot(collection(db, COLLECTION), (snapshot) => {
+      const data = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+      setModules(data);
+      setLoading(false);
+    });
+    return unsub; // afmeld lytter ved unmount
+  }, []);
 
-  const addModule = (moduleData) => {
-    const newModule = { id: crypto.randomUUID(), ...moduleData };
-    setModules(prev => [...prev, newModule]);
-    return newModule;
+  const addModule = async (moduleData) => {
+    const docRef = await addDoc(collection(db, COLLECTION), moduleData);
+    return { id: docRef.id, ...moduleData };
   };
 
-  const updateModule = (id, updates) => {
-    setModules(prev => prev.map(m => m.id === id ? { ...m, ...updates } : m));
+  const updateModule = async (id, updates) => {
+    await updateDoc(doc(db, COLLECTION, id), updates);
   };
 
-  const deleteModule = (id) => {
-    setModules(prev => prev.filter(m => m.id !== id));
+  const deleteModule = async (id) => {
+    await deleteDoc(doc(db, COLLECTION, id));
   };
 
-  const addModules = (modulesData) => {
-    const newModules = modulesData.map(m => ({ id: crypto.randomUUID(), ...m }));
-    setModules(prev => [...prev, ...newModules]);
+  const addModules = async (modulesData) => {
+    const batch = writeBatch(db);
+    for (const m of modulesData) {
+      const ref = doc(collection(db, COLLECTION));
+      batch.set(ref, m);
+    }
+    await batch.commit();
   };
 
-  return { modules, addModule, updateModule, deleteModule, addModules };
+  return { modules, loading, addModule, updateModule, deleteModule, addModules };
 }
