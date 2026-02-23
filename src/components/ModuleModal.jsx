@@ -34,7 +34,7 @@ export default function ModuleModal({ date, module, onSave, onDelete, onClose })
   const handleTitleChange = (e) => {
     const val = e.target.value;
     setTitle(val);
-    if (/refleksion/i.test(val)) setTeacher('Selvstudie');
+    if (/reflek[st]ion/i.test(val)) setTeacher('Selvstudie');
   };
 
   const handleSubmit = (e) => {
