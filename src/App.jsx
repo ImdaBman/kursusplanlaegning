@@ -3,6 +3,7 @@ import MonthGrid from './components/MonthGrid';
 import ModuleModal from './components/ModuleModal';
 import PDFUploader from './components/PDFUploader';
 import DeleteModal from './components/DeleteModal';
+import KursusplanView from './components/KursusplanView';
 import { useModules } from './hooks/useModules';
 import { TEACHER_COLORS, TEACHERS } from './components/ModuleChip';
 import { getHolidays } from './utils/holidays';
@@ -19,6 +20,7 @@ export default function App() {
   const [month, setMonth] = useState(now.getMonth());
   const { modules, loading, addModule, updateModule, deleteModule, addModules, deleteByHoldnavn, resetModules } = useModules();
   const [showDelete, setShowDelete] = useState(false);
+  const [showKursusplan, setShowKursusplan] = useState(false);
 
   const [modal, setModal] = useState(null);
   const [showPDF, setShowPDF] = useState(false);
@@ -73,6 +75,9 @@ export default function App() {
           </div>
         </div>
         <div className="header-right">
+          <button className="btn btn-plan" onClick={() => setShowKursusplan(true)}>
+            Se kursusplan
+          </button>
           <button className="btn btn-pdf" onClick={() => setShowPDF(true)}>
             Importer Excel / CSV
           </button>
@@ -116,6 +121,13 @@ export default function App() {
         <PDFUploader
           onImport={addModules}
           onClose={() => setShowPDF(false)}
+        />
+      )}
+
+      {showKursusplan && (
+        <KursusplanView
+          modules={modules}
+          onClose={() => setShowKursusplan(false)}
         />
       )}
 
